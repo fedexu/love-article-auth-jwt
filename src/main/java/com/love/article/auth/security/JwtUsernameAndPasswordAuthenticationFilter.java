@@ -10,13 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,7 +27,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 	
 	private AuthenticationManager authManager;
 	
-	private final JwtConfig jwtConfig;
+	@Autowired
+	private JwtConfig jwtConfig;
     
 	public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {
 		this.authManager = authManager;
@@ -74,6 +75,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 		
 		// Add token to header
 		response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
+		response.getWriter().write("{\"accessToken\":\"" + jwtConfig.getPrefix() + token + "\"}");
+		response.getWriter().flush();
+		response.getWriter().close();
 	}
 	
 	// A (temporary) class just to represent the user credentials

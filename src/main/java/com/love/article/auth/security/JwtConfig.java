@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import lombok.Getter;
 import lombok.ToString;
 	
- @Getter 		
- @ToString		
+@Getter
+@ToString
 public class JwtConfig {
 
 	@Value("${security.jwt.uri:/auth/login/**}")
